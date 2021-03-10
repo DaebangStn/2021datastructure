@@ -150,8 +150,8 @@ public class BigInteger
 
     public BigInteger multiply(BigInteger big)
     {
-        this.sign = !(this.sign ^ big.sign);
         BigInteger sum = new BigInteger(0);
+        sum.sign = !(this.sign ^ big.sign);
 
         // iterates the same order. ex) 123*456 = 3*6 + 10*(2*6+3*5)+...
         for(int i=0; i<this.digits.length; i++){
