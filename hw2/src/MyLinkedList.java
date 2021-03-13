@@ -70,7 +70,9 @@ public class MyLinkedList<T extends Comparable<T>> implements ListInterface<T> {
 			if(item.equals(last.getNext().getItem())){
 				last.removeNext();
 				numItems -= 1;
+				return;
 			}
+			last = last.getNext();
 		}
 	}
 
