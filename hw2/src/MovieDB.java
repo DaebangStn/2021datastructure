@@ -41,7 +41,7 @@ public class MovieDB extends MyLinkedList<Genre>{
 				genre.remove(item.getTitle());
 				// Printing functionality is provided for the sake of debugging.
 				// This code should be removed before submitting your work.
-				System.err.printf("[trace] MovieDB: DELETE [%s] [%s]\n", item.getGenre(), item.getTitle());
+//				System.err.printf("[trace] MovieDB: DELETE [%s] [%s]\n", item.getGenre(), item.getTitle());
 				return;
 			}
 		}
@@ -58,7 +58,7 @@ public class MovieDB extends MyLinkedList<Genre>{
     	
         // This tracing functionality is provided for the sake of debugging.
         // This code should be removed before submitting your work.
-    	System.err.printf("[trace] MovieDB: SEARCH [%s]\n", term);
+		//   	System.err.printf("[trace] MovieDB: SEARCH [%s]\n", term);
     	
     	// FIXME remove this code and return an appropriate MyLinkedList<MovieDBItem> instance.
     	// This code is supplied for avoiding compilation error.   
