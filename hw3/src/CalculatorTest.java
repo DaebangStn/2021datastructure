@@ -1,11 +1,5 @@
-/*
-there is error on unary -, input/12.txt
- */
-
 import java.io.*;
 import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CalculatorTest
 {
@@ -40,20 +34,25 @@ public class CalculatorTest
 
 	private static String interpret_infix(String exp_infix) throws Exception
 	{
-		final Pattern p = Pattern.compile("[+\\-*/%^()]|(\\d)");
-		final Matcher m = p.matcher(exp_infix);
 		Stack<Opcode> stack = new Stack<>();
 		StringBuilder exp_postfix = new StringBuilder();
+		String c = null;
+		Opcode op_c;
 
 		boolean last_is_num = false;
-		while(m.find()){
-			String c = m.group();
-			Opcode op_c;
+		boolean num_reading = false;
 
-			if(!Opcode.isOpcode(c)){
-				if(!last_is_num){exp_postfix.append(" ");}
+		for(int i=0; i<exp_infix.length(); i++){
+			c = Character.toString(exp_infix.charAt(i));
+
+			if(c.equals(" ")) { num_reading = false;
+			}else if(!Opcode.isOpcode(c)){
+				if(!last_is_num){exp_postfix.append(" ");
+				}else if(!num_reading){ throw new Exception(); }
+
 				exp_postfix.append(c);
 				last_is_num = true;
+				num_reading = true;
 
 			}else if(Opcode.isBracket(c)){
 				op_c = new Opcode(c);
