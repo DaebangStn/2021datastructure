@@ -50,8 +50,10 @@ public class CalculatorTest
 
 			if(c.equals(" ")||c.equals("	")) { last_is_blank = true;
 			}else if(digits.contains(c)){
-				if(!digits.contains(last_captured)){exp_postfix.append(" ");
-				}else if(last_is_blank && !first_char){ throw new Exception(); }
+				if(!digits.contains(last_captured)){exp_postfix.append(" ");}
+
+				if((digits.contains(last_captured) || Opcode.isCloseBracket(last_captured)) && last_is_blank && !first_char){
+					throw new Exception(); }
 
 				exp_postfix.append(c);
 				last_is_blank = false;
