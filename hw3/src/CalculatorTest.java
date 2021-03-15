@@ -76,6 +76,7 @@ public class CalculatorTest
 				if(stack.empty()) { // stack is empty
 				}else if(!stack.peek().succeedThan(op_c)) { // opcode in stack is preceding c, flush until succeeding one comes
 					while (!stack.peek().succeedThan(op_c) && last_is_num) {
+						if(stack.peek().isPow() && op_c.isPow()){ break;} // "^" is right associative. ignore same opcode
 						exp_postfix.append(stack.pop().print());
 						if (stack.empty()) { break; }
 					}
@@ -191,6 +192,7 @@ class Opcode
 
 	public boolean isOpenBracket(){return this.op.equals("(");}
 	public boolean isCloseBracket(){return this.op.equals(")");}
+	public boolean isPow(){return this.op.equals("^");}
 	public boolean isBracket(){ return this.isOpenBracket() || this.isCloseBracket();}
 
 	public String print(){return " " + this.op;}
