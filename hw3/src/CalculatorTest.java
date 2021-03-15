@@ -61,7 +61,7 @@ public class CalculatorTest
 				stack.push(op_c);
 				last_is_blank = false;
 			}else if(op_c.isCloseBracket()) {
-				if(Opcode.isOpcode(last_captured) && !first_char){ throw new Exception(); }
+				if((Opcode.isOpcode(last_captured) || Opcode.isOpenBracket(last_captured)) && !first_char){ throw new Exception(); }
 				while(!stack.peek().isOpenBracket()){
 					if(stack.empty() && !first_char){throw new Exception();} // only ")" remains
 					exp_postfix.append(stack.pop().print());
