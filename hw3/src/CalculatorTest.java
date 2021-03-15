@@ -69,10 +69,10 @@ public class CalculatorTest
 				stack.pop(); // remove remain open bracket
 				last_is_blank = false;
 			}else{
-				if(Opcode.isOpcode(last_captured) || first_char){
+				if(Opcode.isOpcode(last_captured) || Opcode.isOpenBracket(last_captured) || first_char){
 					if(!Opcode.isMinus(c)){ throw new Exception(); }
 					op_c = new Opcode();
-				}else{ op_c = new Opcode(c); }
+				}
 
 				if(stack.empty()) { // stack is empty
 				}else if(!stack.peek().succeedThan(op_c)) { // opcode in stack is preceding c, flush until succeeding one comes
@@ -193,6 +193,8 @@ class Opcode
 	public static boolean isMinus(String str){ return str.equals("-");}
 	public static boolean isUnary(String str){ return str.equals("~");}
 	public static boolean isBracket(String str){ return str.equals("(") || str.equals(")");}
+	public static boolean isOpenBracket(String str){return str.equals("(");}
+	public static boolean isCloseBracket(String str){return str.equals(")");}
 
 	public String getItem(){ return this.op;}
 	public int getPriority(){ return this.priority;}
