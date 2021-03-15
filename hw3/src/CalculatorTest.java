@@ -44,6 +44,7 @@ public class CalculatorTest
 
 		for(int i=0; i<exp_infix.length(); i++){
 			c = Character.toString(exp_infix.charAt(i));
+			op_c = new Opcode(c);
 
 			if(c.equals(" ")||c.equals("	")) { num_reading = false;
 			}else if(!Opcode.isOpcode(c)){
@@ -54,18 +55,16 @@ public class CalculatorTest
 				last_is_num = true;
 				num_reading = true;
 
-			}else if(Opcode.isBracket(c)){
-				op_c = new Opcode(c);
-				if(!last_is_num && op_c.isCloseBracket()){ throw new Exception(); }
-				if(op_c.isOpenBracket()){
-					stack.push(op_c);
-				}else{
-					while(!stack.peek().isOpenBracket()){
-						if(stack.empty()){throw new Exception();} // only ")" remains
-						exp_postfix.append(stack.pop().print());
-					}
-					stack.pop(); // remove remain open bracket
+			}else if(op_c.isOpenBracket()) {
+				if(last_is_num){throw new Exception();}
+				stack.push(op_c);
+			}else if(op_c.isCloseBracket()) {
+				if(!last_is_num){ throw new Exception(); }
+				while(!stack.peek().isOpenBracket()){
+					if(stack.empty()){throw new Exception();} // only ")" remains
+					exp_postfix.append(stack.pop().print());
 				}
+				stack.pop(); // remove remain open bracket
 			}else{
 
 				if(!last_is_num){
