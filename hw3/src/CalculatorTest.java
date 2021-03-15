@@ -56,6 +56,7 @@ public class CalculatorTest
 
 			}else if(Opcode.isBracket(c)){
 				op_c = new Opcode(c);
+				if(!last_is_num){ throw new Exception(); }
 				if(op_c.isOpenBracket()){
 					stack.push(op_c);
 				}else{
