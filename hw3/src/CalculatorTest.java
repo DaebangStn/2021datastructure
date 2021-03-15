@@ -81,8 +81,9 @@ public class CalculatorTest
 					}
 				}
 
-				if(last_is_num){ last_is_num = false; }
 				stack.push(op_c);
+				num_reading = false;
+				last_is_num = false;
 			}
 		}
 
