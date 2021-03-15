@@ -57,7 +57,7 @@ public class CalculatorTest
 				last_is_blank = false;
 
 			}else if(op_c.isOpenBracket()) {
-				if(digits.contains(last_captured) && !first_char){throw new Exception();}
+				if((digits.contains(last_captured) || Opcode.isCloseBracket(last_captured)) && !first_char){throw new Exception();}
 				stack.push(op_c);
 				last_is_blank = false;
 			}else if(op_c.isCloseBracket()) {
