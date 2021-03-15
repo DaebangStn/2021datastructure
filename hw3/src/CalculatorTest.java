@@ -45,7 +45,7 @@ public class CalculatorTest
 		for(int i=0; i<exp_infix.length(); i++){
 			c = Character.toString(exp_infix.charAt(i));
 
-			if(c.equals(" ")) { num_reading = false;
+			if(c.equals(" ")||c.equals("	")) { num_reading = false;
 			}else if(!Opcode.isOpcode(c)){
 				if(!last_is_num){exp_postfix.append(" ");
 				}else if(!num_reading){ throw new Exception(); }
