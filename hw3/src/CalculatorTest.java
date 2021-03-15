@@ -36,45 +36,47 @@ public class CalculatorTest
 	{
 		Stack<Opcode> stack = new Stack<>();
 		StringBuilder exp_postfix = new StringBuilder();
+		String digits = "0123456789";
 		String c = null;
+		String last_captured = new String(" ");
 		Opcode op_c;
 
-		boolean last_is_num = false;
-		boolean num_reading = false;
+		boolean last_is_blank = false;
+		boolean first_char = true;
 
 		for(int i=0; i<exp_infix.length(); i++){
 			c = Character.toString(exp_infix.charAt(i));
 			op_c = new Opcode(c);
 
-			if(c.equals(" ")||c.equals("	")) { num_reading = false;
-			}else if(!Opcode.isOpcode(c)){
-				if(!last_is_num){exp_postfix.append(" ");
-				}else if(!num_reading){ throw new Exception(); }
+			if(c.equals(" ")||c.equals("	")) { last_is_blank = true;
+			}else if(digits.contains(c)){
+				if(!digits.contains(last_captured)){exp_postfix.append(" ");
+				}else if(last_is_blank && !first_char){ throw new Exception(); }
 
 				exp_postfix.append(c);
-				last_is_num = true;
-				num_reading = true;
+				last_is_blank = false;
 
 			}else if(op_c.isOpenBracket()) {
-				if(last_is_num){throw new Exception();}
+				if(digits.contains(last_captured) && !first_char){throw new Exception();}
 				stack.push(op_c);
+				last_is_blank = false;
 			}else if(op_c.isCloseBracket()) {
-				if(!last_is_num){ throw new Exception(); }
+				if(Opcode.isOpcode(last_captured) && !first_char){ throw new Exception(); }
 				while(!stack.peek().isOpenBracket()){
-					if(stack.empty()){throw new Exception();} // only ")" remains
+					if(stack.empty() && !first_char){throw new Exception();} // only ")" remains
 					exp_postfix.append(stack.pop().print());
 				}
 				stack.pop(); // remove remain open bracket
+				last_is_blank = false;
 			}else{
-
-				if(!last_is_num){
+				if(Opcode.isOpcode(last_captured)){
 					if(!Opcode.isMinus(c)){ throw new Exception(); }
 					op_c = new Opcode();
 				}else{ op_c = new Opcode(c); }
 
 				if(stack.empty()) { // stack is empty
 				}else if(!stack.peek().succeedThan(op_c)) { // opcode in stack is preceding c, flush until succeeding one comes
-					while (!stack.peek().succeedThan(op_c) && last_is_num) {
+					while (!stack.peek().succeedThan(op_c)) {
 						if(stack.peek().isPow() && op_c.isPow()){ break;} // "^" is right associative. ignore same opcode
 						exp_postfix.append(stack.pop().print());
 						if (stack.empty()) { break; }
@@ -82,8 +84,12 @@ public class CalculatorTest
 				}
 
 				stack.push(op_c);
-				num_reading = false;
-				last_is_num = false;
+				last_is_blank = false;
+			}
+
+			if(!last_is_blank){
+				last_captured = c;
+				first_char = false;
 			}
 		}
 
@@ -101,7 +107,7 @@ public class CalculatorTest
 		String [] tokens = exp_postfix.split(" ");
 
 		for(String token : tokens){
-			if(!Opcode.isOpcode(token)){
+			if(!Opcode.isSymbol(token)){
 				stack.push(Long.parseLong(token));
 			}else if(Opcode.isUnary(token)){
 				stack.push(-1 * stack.pop());
@@ -153,7 +159,6 @@ class Opcode
 	}
 
 	Opcode(String str) throws Exception{
-		if(!isOpcode(str)){throw new Exception();}
 		this.op = str;
 		switch (str){
 			case "+":
@@ -177,6 +182,10 @@ class Opcode
 	}
 
 	public static boolean isOpcode(String str){
+		final String checker = "+~-*/%^";
+		return checker.contains(str);
+	}
+	public static boolean isSymbol(String str){
 		final String checker = "+~-*/%^()";
 		return checker.contains(str);
 	}
