@@ -249,7 +249,7 @@ public class SortingTest
 			// sum up cnt_radi to find order of num in all range
 			for(int i=0; i<cnt_radi.length-1; i++){cnt_radi[i+1]+=cnt_radi[i];}
 
-			for(int i=0; i<value.length; i++){
+			for(int i=value.length-1; i>-1; i--){
 				int remainder = base + (value[i]/denom)%base;
 				buf[cnt_radi[remainder]-1]=value[i];
 				cnt_radi[remainder]--;
