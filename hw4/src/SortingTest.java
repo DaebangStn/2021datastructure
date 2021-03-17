@@ -158,13 +158,11 @@ public class SortingTest
 			}else if(value[right] >= pivot){ right--; }
 		}
 		if(value[left]>pivot){ // insert pivot left
-			int []buf = new int[left-start-1];
 			for(int i=start; i<left-1; i++){value[i]=value[i+1];}
 			value[left-1] = pivot;
 			quickSort(value, start, left-1);
 			quickSort(value, left, stop);
 		}else{ // insert pivot right
-			int []buf = new int[left-start];
 			for(int i=start; i<left; i++){value[i]=value[i+1];}
 			value[left] = pivot;
 			quickSort(value, start, left);
@@ -235,10 +233,29 @@ public class SortingTest
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	private static int[] DoRadixSort(int[] value)
 	{
-		//https://github.com/simnalamburt/snucse/blob/main/Data%20Stucture/Sorting/SortingTest.java
-		//각 자리수가 가지는 순서를 배열에 담아 정렬하며 복사한다.
-		//스텍을 이용한 방법은 직접 숫자를 복사하지만 위의 링크의 방법은 각 데이터가 가지는 순서를 복사하여 훨씬 적은 메모리공간을 사용할 수 있다.
-		//수업시간에 다루는 코드를 보고 어떻게 과제를 수행할지 고민하자. 위의 방법은 너무 독창적이라 카피가 뜰 수 있다.
+		// save the order or each remainder
+
+		int base = 16;
+		for(int order=0; order<8; order++){
+			int denom = (int)Math.pow(base, order);
+			int[] cnt_radi = new int[2*base]; // because of negative values.
+			int[] buf = new int[value.length];
+
+			for(int i=0; i<value.length; i++){
+				int remainder = base + (value[i]/denom)%base; // add base to make remainder plus
+				cnt_radi[remainder]++;
+			}
+
+			// sum up cnt_radi to find order of num in all range
+			for(int i=0; i<cnt_radi.length-1; i++){cnt_radi[i+1]+=cnt_radi[i];}
+
+			for(int i=0; i<value.length; i++){
+				int remainder = base + (value[i]/denom)%base;
+				buf[cnt_radi[remainder]-1]=value[i];
+				cnt_radi[remainder]--;
+			}
+			value = buf;
+		}
 		return (value);
 	}
 }
