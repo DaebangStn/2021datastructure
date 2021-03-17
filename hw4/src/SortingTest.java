@@ -193,7 +193,7 @@ public class SortingTest
 	{
 		//build up maximum heap
 		for(int i=1; i<value.length; i++)
-			for(int j=i; heap_parent(j) < 0 && value[j]>value[heap_parent(j)]; j=heap_parent(j)){ swap(value, j, heap_parent(j)); }
+			for(int j=i; heap_parent(j) >= 0 && value[j]>value[heap_parent(j)]; j=heap_parent(j)){ swap(value, j, heap_parent(j)); }
 
 		//swap root(maximum) and last one, rearrange the heap
 		for(int i=value.length-1; i>1; i--){
@@ -201,11 +201,17 @@ public class SortingTest
 			int j = 0;
 			while(j<i){
 				int temp;
-				if(heap_left(j) < i && value[j]<value[heap_left(j)]){
-					temp = heap_left(j);
-				} else if(heap_right(j) < i && value[j]<value[heap_right(j)]){
-					temp = heap_right(j);
-				}else{break;}
+				boolean change_l = false;
+				boolean change_r = false;
+				if(heap_left(j) < i && value[j]<value[heap_left(j)]){ change_l = true; }
+				if(heap_right(j) < i && value[j]<value[heap_right(j)]){ change_r = true; }
+				if(change_l && change_r){
+					if(value[heap_left(j)] > value[heap_right(j)]){ temp = heap_left(j);
+					}else{ temp = heap_right(j);}
+				}else if(change_l){ temp = heap_left(j);
+				}else if(change_r){ temp = heap_right(j);
+				}else{ break; }
+
 				swap(value, j, temp);
 				j = temp;
 			}
