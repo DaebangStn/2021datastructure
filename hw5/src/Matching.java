@@ -1,4 +1,7 @@
 import java.io.*;
+import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Matching
 {
@@ -12,12 +15,8 @@ public class Matching
 			try{
 				String[] inputs = br.readLine().split(" ");
 				if(inputs[0].equals("<")){
-					File file = new File(inputs[1]);
-					if(!file.exists()){throw new IOException("No file, path: " + inputs[1]);}
-					BufferedReader read_file = new BufferedReader(new FileReader(file));
-					String str = "";
-					while ((str = read_file.readLine()) != null){System.out.println(str);}
-
+					List<String> data_lst = Files.readAllLines(Paths.get(inputs[1]));
+					for(String str: data_lst){System.out.println(str);}
 					break;
 				}else{
 					throw new IOException("invalid designator");
