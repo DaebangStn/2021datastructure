@@ -37,7 +37,7 @@ public class SubstringTable extends Hashtable<String, Position>{
         }
 
         if(sb.toString().equals("")){return "(0, 0)";}
-        return sb.toString().trim();
+        return sb.deleteCharAt(-1).toString();
     }
 
     public final Node_tree<String, Position> findMatching(String query, int idx){
@@ -77,7 +77,8 @@ class Hashtable<K extends Comparable<K>, V extends Comparable<V>> {
     public final String print(int idx){
         AVLtree<K, V> tree = slots.get(idx);
         if(tree == null){return "EMPTY";}
-        return tree.keyToString().trim();
+        String temp = tree.keyToString();
+        return temp.substring(0, temp.length()-1);
     }
 
 /*
