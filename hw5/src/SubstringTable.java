@@ -37,7 +37,9 @@ public class SubstringTable extends Hashtable<String, Position>{
         }
 
         if(sb.toString().equals("")){return "(0, 0)";}
-        return sb.deleteCharAt(-1).toString();
+
+        String temp = sb.toString();
+        return temp.substring(0, temp.length()-1);
     }
 
     public final Node_tree<String, Position> findMatching(String query, int idx){
