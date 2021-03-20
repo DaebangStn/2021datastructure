@@ -16,6 +16,11 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T>{
     public boolean isEmpty(){return this.head.getNext() == null;}
     public int size(){return this.numItems;}
 
+    public final boolean contains(T obj){
+        for(T item: this){if(item.equals(obj)){return true;}}
+        return false;
+    }
+
     public void add(T obj){
         if(this.isEmpty()){
             this.head.insertNext(obj);

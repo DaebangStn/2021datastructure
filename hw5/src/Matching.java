@@ -27,24 +27,24 @@ public class Matching
 
 	private static void command(String input) throws IOException
 	{
-		String[] inputs = input.split(" ");
-		if(inputs[0].equals("<")){
+		String in1 = input.substring(0, 1);
+		String in2 = input.substring(2);
+		if(in1.equals("<")){
 			table = new SubstringTable();
-			List<String> data_lst = Files.readAllLines(Paths.get(inputs[1]));
+			List<String> data_lst = Files.readAllLines(Paths.get(in2));
 
 			for(int j=0; j<data_lst.size(); j++){
 				String str = data_lst.get(j);
 				String str_sub;
-				for(int i=0; i<str.length()-6; i++){
+				for(int i=0; i<=str.length()-6; i++){
 					str_sub = str.substring(i, i+6);
 					table.add(str_sub, new Position(j, i));
 				}
 			}
-		}else if(inputs[0].equals("@")){
-			System.out.println(table.print(Integer.parseInt(inputs[1])));
-		}else if(inputs[0].equals("?")){
-			for(Position p: table.search(inputs[1]))
-				System.out.println(p.toString());
+		}else if(in1.equals("@")){
+			System.out.println(table.print(Integer.parseInt(in2)));
+		}else if(in1.equals("?")){
+			System.out.println(table.search(in2));
 		}else{
 			throw new IOException("invalid pattern");
 		}

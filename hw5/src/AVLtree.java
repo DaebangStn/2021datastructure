@@ -14,15 +14,19 @@ public class AVLtree<K extends Comparable<K>, V extends Comparable<V>>{
 
         temp = root.addNode(new Node_tree<>(key, value));
         temp.balance();
+        this.updateRoot();
     }
-
-    public final LinkedList<V> searchKey(K query){return (LinkedList<V>) new Object();}// TODO
-    // TODO: @ 명령어에 대한 응답으로 전위순회하며 출력하기
 
     public final Node_tree<K, V> getRoot(){return this.root;}
 
     public final String keyToString(){
         return this.getRoot().keyToString();
+    }
+
+    private void updateRoot(){
+        Node_tree<K, V> temp = this.root;
+        while (temp.getParent() != null){temp = temp.getParent();}
+        this.root = temp;
     }
 }
 
@@ -30,28 +34,16 @@ class Node_tree<K extends Comparable<K>, V extends Comparable<V>> extends Linked
     private Node_tree<K, V> left, right, parent;
     private K key;
     private int height;
-    Node_tree(K key){
-        super();
-        this.parent = null;
-        this.left = null;
-        this.right = null;
-        this.height = 0;
-        this.key = key;
-    }
 
     Node_tree(K key, V value){
         super();
-        this.parent = null;
-        this.left = null;
-        this.right = null;
-        this.height = 0;
-        this.key = key;
+        this.parent = null; this.left = null; this.right = null;
+        this.height = 0; this.key = key;
         this.add(value);
     }
 
     public final String keyToString(){
-        String str_l = "";
-        String str_r = "";
+        String str_l = ""; String str_r = "";
         if(this.getLeft() != null){str_l =  this.getLeft().keyToString();}
         if(this.getRight() != null){str_r = this.getRight().keyToString();}
         return this.getKey() + " " + str_l + str_r;
@@ -196,7 +188,11 @@ class Node_tree<K extends Comparable<K>, V extends Comparable<V>> extends Linked
 class Position extends Pair<Integer, Integer> implements Comparable<Position>{
     Position(Integer obj1, Integer obj2) { super(obj1, obj2); }
 
-    final public String toString(){return "("+this.first+", "+this.second+")";}
+    public final String toString(){return "("+Integer.toString(this.first + 1)+", "+Integer.toString(this.second + 1)+")";}
+
+    public final boolean shiftedTo(Position other, int shift){
+        return this.first == other.first && this.second - shift == other.second;
+    }
 
     @Override
     public int compareTo(Position o) {

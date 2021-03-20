@@ -11,6 +11,42 @@ public class SubstringTable extends Hashtable<String, Position>{
         for(int i=0; i<key.length(); i++){temp += key.charAt(i);}
         return temp % this.size;
     }
+
+    public final String search(String query){
+        StringBuilder sb = new StringBuilder();
+        Node_tree<String, Position> matched_first = this.findMatching(query, 0);
+        if(matched_first == null){return "(0, 0)";}
+        for(Position pos_candidate: matched_first){
+            int idx = 6;
+            boolean matched = true;
+
+            while(idx < query.length()){
+                if(idx > query.length() - 6){ idx = query.length() - 6; }
+                matched = false;
+                Node_tree<String, Position> temp = this.findMatching(query, idx);
+                if(temp == null){return "(0, 0)";}
+                for(Position pos_temp: temp){ if(pos_temp.shiftedTo(pos_candidate, idx)){matched = true;}}
+                if(!matched){break;} // there is no matching in idx
+
+                idx += 6;
+            }
+
+            if(!matched){continue;} // there is an mismatching one, do not append to sb
+
+            sb.append(pos_candidate.toString()).append(" ");
+        }
+
+        if(sb.toString().equals("")){return "(0, 0)";}
+        return sb.toString().trim();
+    }
+
+    public final Node_tree<String, Position> findMatching(String query, int idx){
+        String query_sub = getSubQuery(query, idx);
+        if(this.slots.get(this.getHash(query_sub)) == null){return null;}
+        return this.slots.get(this.getHash(query_sub)).getRoot().findKey(query_sub);
+    }
+
+    public static String getSubQuery(String query, int idx){return query.substring(idx, idx+6);}
 }
 
 class Hashtable<K extends Comparable<K>, V extends Comparable<V>> {
@@ -43,8 +79,6 @@ class Hashtable<K extends Comparable<K>, V extends Comparable<V>> {
         if(tree == null){return "EMPTY";}
         return tree.keyToString().trim();
     }
-
-    public LinkedList<V> search(K query){ return (LinkedList<V>) new Object();}// TODO
 
 /*
     public Node_tree<K, V> get(K key){ return (Node_tree<K, V>) new Object(); }
