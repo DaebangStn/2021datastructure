@@ -9,7 +9,6 @@ public class SubstringTable extends Hashtable<String, Position>{
     public int getHash(String key){
         int temp = 0;
         for(int i=0; i<key.length(); i++){temp += key.charAt(i);}
-        System.out.println("key "+key+" hashed to "+ temp % this.size);
         return temp % this.size;
     }
 }
@@ -25,11 +24,27 @@ class Hashtable<K extends Comparable<K>, V extends Comparable<V>> {
     }
 
     public int getHash(K obj){return obj.hashCode()%size;}
-    // TODO: using AVLtree's operation
-    public void add(K key, V value){ }// TODO
-    public boolean contains(K key){return false;}// TODO
-    public LinkedList<K> search(int idx){return (LinkedList<K>) new Object();}// TODO
-    public LinkedList<V> search(K query){return (LinkedList<V>) new Object(); }// TODO
+
+    public void add(K key, V value){
+        int h = this.getHash(key);
+        AVLtree<K, V> tree = slots.get(this.getHash(key));
+        if(tree == null){slots.set(this.getHash(key), new AVLtree<>(key, value)); return;}
+        tree.add(key, value);
+    }
+
+    public boolean contains(K key){
+        AVLtree<K, V> tree = slots.get(this.getHash(key));
+        if(tree.getRoot().findKey(key) == null) {return false;}
+        return true;
+    }
+
+    public final String print(int idx){
+        AVLtree<K, V> tree = slots.get(idx);
+        if(tree == null){return "EMPTY";}
+        return tree.keyToString().trim();
+    }
+
+    public LinkedList<V> search(K query){ return (LinkedList<V>) new Object();}// TODO
 
 /*
     public Node_tree<K, V> get(K key){ return (Node_tree<K, V>) new Object(); }

@@ -5,26 +5,11 @@ import java.nio.file.Paths;
 
 public class Matching
 {
+	static SubstringTable table;
+
 	public static void main(String args[])
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		SubstringTable table = new SubstringTable();
-
-		// handle string input
-		while (true){
-			try{
-				String[] inputs = br.readLine().split(" ");
-				if(inputs[0].equals("<")){
-					List<String> data_lst = Files.readAllLines(Paths.get(inputs[1]));
-					for(String str: data_lst){System.out.println(str);}
-					break;
-				}else{
-					throw new IOException("invalid designator");
-				}
-			}catch (IOException e){
-				System.err.println("입력이 잘못되었습니다. 오류 : " + e.toString());
-			}
-		}
 
 		while (true){
 			try
@@ -42,8 +27,26 @@ public class Matching
 
 	private static void command(String input) throws IOException
 	{
-		File f = new File("./test.txt");
+		String[] inputs = input.split(" ");
+		if(inputs[0].equals("<")){
+			table = new SubstringTable();
+			List<String> data_lst = Files.readAllLines(Paths.get(inputs[1]));
 
-		System.out.println("파일의 존재 여부 " + f.exists());
+			for(int j=0; j<data_lst.size(); j++){
+				String str = data_lst.get(j);
+				String str_sub;
+				for(int i=0; i<str.length()-6; i++){
+					str_sub = str.substring(i, i+6);
+					table.add(str_sub, new Position(j, i));
+				}
+			}
+		}else if(inputs[0].equals("@")){
+			System.out.println(table.print(Integer.parseInt(inputs[1])));
+		}else if(inputs[0].equals("?")){
+			for(Position p: table.search(inputs[1]))
+				System.out.println(p.toString());
+		}else{
+			throw new IOException("invalid pattern");
+		}
 	}
 }
