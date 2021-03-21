@@ -178,11 +178,6 @@ class Node_tree<K extends Comparable<K>, V extends Comparable<V>> extends Linked
         if(this.getParent().getLeft() == this){ this.getParent().setLeft(obj);
         }else{ this.getParent().setRight(obj); }
     }
-
-/*
-    public final void incBal(){this.bal++;}
-    public final void decBal(){this.bal--;}
-*/
 }
 
 class Position extends Pair<Integer, Integer> implements Comparable<Position>{
