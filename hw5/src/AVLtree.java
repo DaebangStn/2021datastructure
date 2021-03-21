@@ -188,7 +188,7 @@ class Node_tree<K extends Comparable<K>, V extends Comparable<V>> extends Linked
 class Position extends Pair<Integer, Integer> implements Comparable<Position>{
     Position(Integer obj1, Integer obj2) { super(obj1, obj2); }
 
-    public final String toString(){return "("+Integer.toString(this.first + 1)+", "+Integer.toString(this.second + 1)+")";}
+    public final String toString(){return "("+ (this.first + 1) +", "+ (this.second + 1) +")";}
 
     public final boolean shiftedTo(Position other, int shift){
         return this.first.equals(other.first) && this.second - shift == other.second;
