@@ -25,7 +25,10 @@ public class SubstringTable extends Hashtable<String, Position>{
                 matched = false;
                 Node_tree<String, Position> temp = this.findMatching(query, idx);
                 if(temp == null){return "(0, 0)";}
-                for(Position pos_temp: temp){ if(pos_temp.shiftedTo(pos_candidate, idx)){matched = true;}}
+                for(Position pos_temp: temp){
+                    if(pos_temp.shiftedTo(pos_candidate, idx)){
+                        matched = true;}
+                }
                 if(!matched){break;} // there is no matching in idx
 
                 idx += 6;

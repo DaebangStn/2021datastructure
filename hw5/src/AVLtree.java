@@ -191,7 +191,7 @@ class Position extends Pair<Integer, Integer> implements Comparable<Position>{
     public final String toString(){return "("+Integer.toString(this.first + 1)+", "+Integer.toString(this.second + 1)+")";}
 
     public final boolean shiftedTo(Position other, int shift){
-        return this.first == other.first && this.second - shift == other.second;
+        return this.first.equals(other.first) && this.second - shift == other.second;
     }
 
     @Override
