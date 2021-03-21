@@ -196,8 +196,8 @@ class Position extends Pair<Integer, Integer> implements Comparable<Position>{
 
     @Override
     public int compareTo(Position o) {
-        if(this.first!=o.first){return this.first-o.first;}
-        if(this.second!=o.second){return this.second-o.second;}
+        if(!this.first.equals(o.first)){ return this.first-o.first; }
+        if(!this.second.equals(o.second)){ return this.second-o.second; }
         return 0;
     }
 }
