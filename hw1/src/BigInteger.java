@@ -8,15 +8,6 @@ public class BigInteger
 {
     public static final String QUIT_COMMAND = "quit";
     public static final String MSG_INVALID_INPUT = "입력이 잘못되었습니다.";
-/*
-    regex info
-    \\s -> blank character, \\d -> [0-9]
-    since [+-*] throws error ('-' is used as [A-Z]), '\-' is needed. so [+\\-*] is used.
-    -----
-    pattern info
-    group1: num1 sign, g2: num1 characters, g3: operator, g4: num2 sign, g5: num2 characters
-*/
-    public static final Pattern EXPRESSION_PATTERN = Pattern.compile("\\s*([+-]?)\\s*(\\d+)\\s*([+\\-*])\\s*([+-]?)\\s*(\\d+)\\s*");
 
     // sign: true when >=0 false when <0, digits[0] -> lowest digit
     public boolean sign;
@@ -190,7 +181,16 @@ public class BigInteger
 
     static BigInteger evaluate(String input) throws IllegalArgumentException
     {
-        final Matcher matcher = EXPRESSION_PATTERN.matcher(input);
+/*
+    regex info
+    \\s -> blank character, \\d -> [0-9]
+    since [+-*] throws error ('-' is used as [A-Z]), '\-' is needed. so [+\\-*] is used.
+    -----
+    pattern info
+    group1: num1 sign, g2: num1 characters, g3: operator, g4: num2 sign, g5: num2 characters
+*/
+        final Pattern pattern = Pattern.compile("\\s*([+-]?)\\s*(\\d+)\\s*([+\\-*])\\s*([+-]?)\\s*(\\d+)\\s*");
+        final Matcher matcher = pattern.matcher(input);
 
         if(!matcher.matches()){ throw new IllegalArgumentException();}
 
