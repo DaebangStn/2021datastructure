@@ -3,7 +3,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class MyLinkedList<T extends Comparable<T>> implements ListInterface<T> {
-	// dummy head
 	Node<T> head;
 	int numItems;
 
@@ -47,12 +46,19 @@ public class MyLinkedList<T extends Comparable<T>> implements ListInterface<T> {
 	@Override
 	public void add(T item) {
 		if(this.isEmpty()){
-			head.insertNext(item);
+			head = new Node<>(item);
 			numItems += 1;
 			return;
 		}
 
-		Node<T> last = head;
+		if(this.size()==1){
+			Node<T> temp = new Node<>(item);
+			head.setNext(temp);
+			numItems += 1;
+			return;
+		}
+
+		Node<T> last = head.getNext();
 		while (last.getNext() != null) {
 			int cmp = item.compareTo(last.getNext().getItem());
 			if(cmp == 0){ // already exist item in LL

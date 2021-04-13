@@ -1,7 +1,3 @@
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-
 /**
  * Genre, Title 을 관리하는 영화 데이터베이스.
  * 
@@ -64,9 +60,11 @@ public class MovieDB extends MyLinkedList<Genre>{
     	// This code is supplied for avoiding compilation error.   
         MyLinkedList<MovieDBItem> results = new MyLinkedList<MovieDBItem>();
 		for(Genre genre: this){
+			String gen = genre.list_movie.first();
 			for(String title: genre.list_movie){
+				if(title.equals(gen)) {continue;}
 				if(title.contains(term)){
-					results.add(new MovieDBItem(genre.getItem(), title));
+					results.add(new MovieDBItem(gen, title));
 				}
 			}
 		}
@@ -89,8 +87,10 @@ public class MovieDB extends MyLinkedList<Genre>{
     	// This code is supplied for avoiding compilation error.
         MyLinkedList<MovieDBItem> results = new MyLinkedList<MovieDBItem>();
 		for(Genre genre: this){
+			String gen = genre.list_movie.first();
 			for(String title: genre.list_movie){
-				results.add(new MovieDBItem(genre.getItem(), title));
+				if(title.equals(gen)) {continue;}
+				results.add(new MovieDBItem(gen, title));
 			}
 		}
 
@@ -102,14 +102,16 @@ class Genre extends Node<String> implements Comparable<Genre> {
 	public MyLinkedList<String> list_movie;
 
 	public Genre(String name) {
-		super(name);
+		super("dummy");
 		this.list_movie = new MyLinkedList<>();
+		this.list_movie.add(name);
 	}
 
 	public Genre(String name, String title) {
-		super(name);
+		super("dummy");
 		this.list_movie = new MyLinkedList<>();
-		this.add(title);
+		this.list_movie.add(name);
+		this.list_movie.add(title);
 	}
 
 	public void add(String title){
