@@ -61,8 +61,10 @@ public class MovieDB extends MyLinkedList<Genre>{
         MyLinkedList<MovieDBItem> results = new MyLinkedList<MovieDBItem>();
 		for(Genre genre: this){
 			String gen = genre.list_movie.first();
-			for(String title: genre.list_movie){
-				if(title.equals(gen)) {continue;}
+			Node<String> h = genre.list_movie.getHead().getNext();
+			while(h != null){
+				String title = h.getItem();
+				h = h.getNext();
 				if(title.contains(term)){
 					results.add(new MovieDBItem(gen, title));
 				}
@@ -88,9 +90,11 @@ public class MovieDB extends MyLinkedList<Genre>{
         MyLinkedList<MovieDBItem> results = new MyLinkedList<MovieDBItem>();
 		for(Genre genre: this){
 			String gen = genre.list_movie.first();
-			for(String title: genre.list_movie){
-				if(title.equals(gen)) {continue;}
+			Node<String> h = genre.list_movie.getHead().getNext();
+			while(h != null){
+				String title = h.getItem();
 				results.add(new MovieDBItem(gen, title));
+				h = h.getNext();
 			}
 		}
 
@@ -99,17 +103,17 @@ public class MovieDB extends MyLinkedList<Genre>{
 }
 
 class Genre extends Node<String> implements Comparable<Genre> {
-	public MyLinkedList<String> list_movie;
+	public MovieList list_movie;
 
 	public Genre(String name) {
-		super("dummy");
-		this.list_movie = new MyLinkedList<>();
+		super(name);
+		this.list_movie = new MovieList();
 		this.list_movie.add(name);
 	}
 
 	public Genre(String name, String title) {
-		super("dummy");
-		this.list_movie = new MyLinkedList<>();
+		super(name);
+		this.list_movie = new MovieList();
 		this.list_movie.add(name);
 		this.list_movie.add(title);
 	}
@@ -125,17 +129,17 @@ class Genre extends Node<String> implements Comparable<Genre> {
 	@Override
 	public int compareTo(Genre o) {
 		if(o == null){return -1;} // o is the last value
-		if(this.getItem() == null){return 1;} // this is head
-		return this.getItem().compareTo(o.getItem());
+		if(this.list_movie.first() == null){return 1;} // this is head
+		return this.list_movie.first().compareTo(o.list_movie.first());
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if(this == o) {return true;}
 		if(o == null || getClass() != o.getClass()) {return false;}
-		if(this.getItem() == null) {return false;}
+		if(this.list_movie.first() == null) {return false;}
 		Genre genre = (Genre) o;
-		return this.getItem().equals(genre.getItem());
+		return this.list_movie.first().equals(genre.list_movie.first());
 	}
 
 	@Override
@@ -150,51 +154,57 @@ class Genre extends Node<String> implements Comparable<Genre> {
 }
 
 class MovieList extends MyLinkedList<String> implements ListInterface<String> {
-//	String genre;
 
 	public MovieList() {
 		super();
 	}
-/*
-	public MovieList(String g) {
-		super();
-		this.genre = g;
-	}
-
-	public MovieList(String g, String title) {
-		super();
-		this.genre = g;
-		this.add(title);
-	}
-///*
-	@Override
-	public Iterator<String> iterator() {
-		throw new UnsupportedOperationException("not implemented yet");
-	}
-
-	@Override
-	public boolean isEmpty() {
-		throw new UnsupportedOperationException("not implemented yet");
-	}
-
-	@Override
-	public int size() {
-		throw new UnsupportedOperationException("not implemented yet");
-	}
 
 	@Override
 	public void add(String item) {
-		throw new UnsupportedOperationException("not implemented yet");
+		if(this.size()==0){
+			head = new Node<>(item);
+			numItems += 1;
+			return;
+		}
+
+		if(this.size()==1){
+			Node<String> temp = new Node<>(item);
+			head.setNext(temp);
+			numItems += 1;
+			return;
+		}
+
+		Node<String> last = head;
+		while (last.getNext() != null) {
+			int cmp = item.compareTo(last.getNext().getItem());
+			if(cmp == 0){ // already exist item in LL
+				return;
+			}else if(cmp < 0){ break;}
+			last = last.getNext();
+		}
+		last.insertNext(item);
+		numItems += 1;
+	}
+
+	public void remove(String item){
+		if(numItems < 2){return;}
+
+		Node<String> last = head;
+		while (last.getNext() != null) {
+			if(item.equals(last.getNext().getItem())){
+				last.removeNext();
+				numItems -= 1;
+				return;
+			}
+			last = last.getNext();
+		}
 	}
 
 	@Override
 	public String first() {
-		throw new UnsupportedOperationException("not implemented yet");
+		return head.getItem();
 	}
 
-	@Override
-	public void removeAll() {
-		throw new UnsupportedOperationException("not implemented yet");
-	}
- */
+	public Node<String> getHead(){return this.head;}
+
 }

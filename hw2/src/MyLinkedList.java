@@ -46,19 +46,12 @@ public class MyLinkedList<T extends Comparable<T>> implements ListInterface<T> {
 	@Override
 	public void add(T item) {
 		if(this.isEmpty()){
-			head = new Node<>(item);
+			head.setNext(new Node<>(item));
 			numItems += 1;
 			return;
 		}
 
-		if(this.size()==1){
-			Node<T> temp = new Node<>(item);
-			head.setNext(temp);
-			numItems += 1;
-			return;
-		}
-
-		Node<T> last = head.getNext();
+		Node<T> last = head;
 		while (last.getNext() != null) {
 			int cmp = item.compareTo(last.getNext().getItem());
 			if(cmp == 0){ // already exist item in LL
@@ -71,7 +64,9 @@ public class MyLinkedList<T extends Comparable<T>> implements ListInterface<T> {
 	}
 
 	public void remove(T item){
-		Node<T> last = head;
+    	if(numItems < 2){return;}
+
+		Node<T> last = head.getNext();
 		while (last.getNext() != null) {
 			if(item.equals(last.getNext().getItem())){
 				last.removeNext();
