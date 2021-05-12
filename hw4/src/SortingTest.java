@@ -45,6 +45,7 @@ public class SortingTest
 				int[] newvalue = (int[])value.clone();	// 원래 값의 보호를 위해 복사본을 생성한다.
 
 				String command = br.readLine();
+				String[] com = command.split("-");
 
 				long t = System.currentTimeMillis();
 				switch (command.charAt(0))
@@ -65,7 +66,7 @@ public class SortingTest
 						newvalue = DoQuickSort(newvalue);
 						break;
 					case 'R':	// Radix Sort
-						newvalue = DoRadixSort(newvalue);
+						newvalue = DoRadixSort(newvalue, Integer.parseInt(com[1]));
 						break;
 					case 'X':
 						return;	// 프로그램을 종료한다.
@@ -237,11 +238,11 @@ public class SortingTest
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	private static int[] DoRadixSort(int[] value)
+	private static int[] DoRadixSort(int[] value, int tmp)
 	{
 		// save the order or each remainder
 
-		int base = 16;
+		int base = tmp;
 		for(int order=0; order<8; order++){
 			int denom = (int)Math.pow(base, order);
 			int[] cnt_radi = new int[2*base]; // because of negative values.
