@@ -36,7 +36,6 @@ public class Subway {
 
                 System.out.println(process_path(input));
             }
-            System.err.println("END");
         } catch (Exception e) {
             System.err.println("ERROR");
         }
